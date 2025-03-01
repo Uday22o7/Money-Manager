@@ -32,24 +32,25 @@ nav {
 }
 
 .blueButton {
-    background-color:var(--mcolor);
-    /* Blue color */
+    background-color: var(--mcolor);
     color: white;
     font-size: 16px;
     font-weight: bold;
     border: none;
     border-radius: 30px;
-    /* Rounded edges */
     padding: 10px 20px;
     cursor: pointer;
     text-align: center;
     display: inline-block;
-    transition: background-color 0.3s ease;
+    /* transition: background-color 0.3s ease; */
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .blueButton:hover {
     background-color: #0056b3;
-    /* Darker blue on hover */
+
 }
 
 .nav-links {
@@ -69,16 +70,18 @@ nav {
     color: #3498db;
 }
 
-.sign-up{
+.sign-up {
     color: #ffffff;
     text-decoration: none;
 }
 
-/* Hero Section */
+/* Hero Section with Wave */
 .hero {
-    padding: 100px 50px;
+    position: relative;
+    padding: 100px 50px 150px;
     background: #f8f9fa;
     text-align: center;
+    overflow: hidden;
 }
 
 .hero h1 {
@@ -96,12 +99,86 @@ nav {
     line-height: 1.6;
 }
 
+/* Wave Styles */
+.wave-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.wave {
+    width: 100%;
+    height: 150px;
+    fill: #007bff;
+    transform: scaleY(-1);
+}
+
+/* Add these styles */
+.bottom-wave {
+    --wave-color: rgba(0, 123, 255, 0.3);
+    /* Using your primary color */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.wave-path {
+    fill: var(--wave-color);
+    stroke: var(--wave-color);
+    stroke-width: 2px;
+}
+
+.bottom-wave svg {
+    position: absolute;
+    bottom: -10%;
+    right: -10%;
+    width: 120%;
+    height: 120%;
+    animation: waveRise 20s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(0, 123, 255, 0.2));
+}
+
+@keyframes waveRise {
+    0% {
+        transform: translate(0, 0) rotate(10deg);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(-100%, -100%) rotate(10deg);
+        opacity: 0.4;
+    }
+}
+
+/* Add gradient overlay for better visibility */
+.bottom-wave::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top right,
+            var(--mcolor) 10%,
+            transparent 60%);
+    mix-blend-mode: multiply;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     nav {
         padding: 20px;
         flex-direction: column;
         gap: 15px;
+    }
+
+    .hero {
+        padding: 80px 20px 120px;
     }
 
     .hero h1 {
@@ -111,5 +188,9 @@ nav {
     .nav-links {
         flex-wrap: wrap;
         justify-content: center;
+    }
+
+    .wave {
+        height: 80px;
     }
 }
