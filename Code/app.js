@@ -13,8 +13,14 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.get("/",(req,res)=>{
-    res.send("Hello")
+    res.render("./landingPage.ejs")
 });
+
+app.get("/auth",(req,res)=>{
+    res.render("./authPage.ejs")
+});
+
+
 
 app.listen(port, (req, res) => {
     console.log(`Server is live on port 8000.  http://localhost:${port}`)

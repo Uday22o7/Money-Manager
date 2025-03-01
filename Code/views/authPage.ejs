@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Page</title>
+    <link rel="stylesheet" href="/css/authPage.css">
+</head>
+
+<body>
+    <nav>
+        <div class="logo">Money Manager</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#services">Services</a>
+        </div>
+        <button class="blueButton"> <a class="sign_up" href="/auth">Sign Up</a> </button>
+    </nav>
+
+
+
+    <div class="auth-container">
+        <div class="form-container" id="formContainer">
+            <!-- Sign In Form -->
+            <div class="form sign-in">
+                <h2 class="mainHeader">Sign In</h2>
+                <form>
+                    <div class="form-group">
+                        <input type="email" id="signInEmail" required>
+                        <label for="signInEmail">Email</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="signInPassword" required>
+                        <label for="signInPassword">Password</label>
+                    </div>
+                    <button type="submit" class="submit-btn">Sign In</button>
+                </form>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div class="form sign-up">
+                <h2 class="mainHeader">Create Account</h2>
+                <form>
+                    <div class="form-group">
+                        <input type="text" id="signUpUsername" required>
+                        <label for="signUpUsername">Username</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="signUpEmail" required>
+                        <label for="signUpEmail">Email</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="signUpPassword" required>
+                        <label for="signUpPassword">Password</label>
+                    </div>
+                    <button type="submit" class="submit-btn">Sign Up</button>
+                </form>
+            </div>
+
+            <!-- Sliding Overlay -->
+            <div class="overlay-container" id="overlayContainer">
+                <div class="overlay">
+                    <div class="overlay-panel left">
+                        <h2>Welcome Back!</h2>
+                        <p>To keep connected please login with your personal info</p>
+                        <button class="switch-btn" id="signInBtn">Sign In</button>
+                    </div>
+                    <div class="overlay-panel right">
+                        <h2>Hello, Friend!</h2>
+                        <p>Enter your personal details and start journey with us</p>
+                        <button class="switch-btn" id="signUpBtn">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/authPage.js"></script>
+</body>
+
+</html>

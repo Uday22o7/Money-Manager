@@ -1,0 +1,109 @@
+:root {
+    --mcolor: #007bff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Navigation Bar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--mcolor);
+}
+
+.blueButton {
+    background-color:var(--mcolor);
+    /* Blue color */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    /* Rounded edges */
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.blueButton:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+    padding-right: 5%;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #3498db;
+}
+
+.sign-up{
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Hero Section */
+.hero {
+    padding: 100px 50px;
+    background: #f8f9fa;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav {
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
