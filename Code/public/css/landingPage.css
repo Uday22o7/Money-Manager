@@ -25,6 +25,12 @@ nav {
     color: var(--mcolor);
 }
 
+.siteLogo{
+    font-size: 24px;
+    /* font-weight: bold; */
+    color: var(--mcolor);
+}
+
 .blueButton {
     background-color:var(--mcolor);
     /* Blue color */
