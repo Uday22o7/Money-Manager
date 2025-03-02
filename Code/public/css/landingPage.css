@@ -9,16 +9,16 @@
     font-family: 'Arial', sans-serif;
 }
 
-/* For modern browsers (Chrome, Safari, Edge) */
+/* Scrollbar Styles */
 ::-webkit-scrollbar {
-    display: none; /* Hide scrollbar */
-  }
-  
-  html {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
-    overflow-y: scroll; /* Allow vertical scrolling */
-  }
+    display: none;
+}
+
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-y: scroll;
+}
 
 /* Navigation Bar */
 nav {
@@ -34,19 +34,20 @@ nav {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-  }
-  
-  .logo-svg {
+}
+
+.logo-svg {
     width: 40px;
     height: 40px;
-  }
+}
 
-  .logo span {
+.logo span {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #3498db; /* Brand color */
-  }
+    color: #3498db;
+}
 
+/* Button Styles */
 .blueButton {
     background-color: var(--mcolor);
     color: white;
@@ -56,19 +57,18 @@ nav {
     border-radius: 30px;
     padding: 10px 20px;
     cursor: pointer;
-    text-align: center;
-    display: inline-block;
-    /* transition: background-color 0.3s ease; */
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .blueButton:hover {
     background-color: #0056b3;
-
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
 }
 
+/* Navigation Links */
 .nav-links {
     display: flex;
     gap: 30px;
@@ -91,7 +91,7 @@ nav {
     text-decoration: none;
 }
 
-/* Hero Section with Wave */
+/* Hero Section */
 .hero {
     position: relative;
     padding: 100px 50px 150px;
@@ -115,25 +115,9 @@ nav {
     line-height: 1.6;
 }
 
-/* Wave Styles */
-.wave-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}
-
-.wave {
-    width: 100%;
-    height: 150px;
-    fill: #007bff;
-    transform: scaleY(-1);
-}
-
-/* Add these styles */
+/* Wave Effects */
 .bottom-wave {
     --wave-color: rgba(0, 123, 255, 0.3);
-    /* Using your primary color */
     position: absolute;
     bottom: 0;
     right: 0;
@@ -171,7 +155,6 @@ nav {
     }
 }
 
-/* Add gradient overlay for better visibility */
 .bottom-wave::after {
     content: '';
     position: absolute;
@@ -179,10 +162,263 @@ nav {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to top right,
-            var(--mcolor) 10%,
-            transparent 60%);
+    background: linear-gradient(to top right, var(--mcolor) 10%, transparent 60%);
     mix-blend-mode: multiply;
+}
+
+/* Content Sections */
+.content-section {
+    padding: 100px 50px;
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.alt-bg {
+    background: #f8f9fa;
+}
+
+.section-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    z-index: 2;
+}
+
+.section-content h2 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 50px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.section-content h2:hover {
+    color: var(--mcolor);
+    transform: scale(1.02);
+}
+
+/* About Section */
+/* Base Section Styling */
+.content-section {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-content {
+    text-align: center;
+}
+
+/* Titles */
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+/* Alternate Background */
+.alt-bg {
+    background: #f8f9fa;
+    /* Light grey or your brand’s accent color */
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+/* About Grid */
+.about-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.about-card {
+    background: #ffffff;
+    flex: 1 1 280px;
+    min-width: 280px;
+    max-width: 350px;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #007bff;
+    /* brand color or accent color */
+}
+
+.about-card p {
+    color: #555;
+    line-height: 1.6;
+}
+
+.about-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Services Grid */
+.services-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.service-card {
+    background: #ffffff;
+    flex: 1 1 280px;
+    min-width: 280px;
+    max-width: 350px;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.service-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #007bff;
+    /* brand color or accent color */
+}
+
+.service-card p {
+    color: #555;
+    line-height: 1.6;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--mcolor);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover::before {
+    transform: scaleX(1);
+}
+
+.service-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover .service-icon {
+    animation: iconPulse 1s ease infinite;
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+/* Section Waves */
+.section-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 1;
+}
+
+.section-wave svg {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+/* In your CSS */
+.blueButton {
+    /* Existing styles */
+    display: inline-block;
+    /* Changed from inline-block to proper link styling */
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+}
+
+/* Add focus states for accessibility */
+.blueButton:focus {
+    outline: 3px solid rgba(0, 123, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* Add ARIA states for screen readers */
+.blueButton[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Ensure proper keyboard navigation */
+.blueButton:focus-visible {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.hero {
+    position: relative;
+}
+
+.blueButton {
+    position: relative;
+    z-index: 2;
+    /* Ensure button stays above wave */
+}
+
+.bottom-wave {
+    z-index: 1;
+    /* Keep wave behind content */
+}
+
+/* Fix button nesting in navigation */
+nav .blueButton {
+    padding: 0;
+    /* Remove button padding to fix nested anchor */
+}
+
+nav .sign-up {
+    display: block;
+    padding: 10px 20px;
+    /* Add padding to anchor instead */
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 /* Responsive Design */
@@ -206,7 +442,22 @@ nav {
         justify-content: center;
     }
 
-    .wave {
-        height: 80px;
+    .content-section {
+        padding: 60px 20px;
+    }
+
+    .section-content h2 {
+        font-size: 2rem;
+    }
+
+    .about-grid,
+    .services-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .about-card,
+    .service-card {
+        padding: 25px;
     }
 }

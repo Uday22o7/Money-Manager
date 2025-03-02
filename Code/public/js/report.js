@@ -1,49 +1,77 @@
 
 
 function initCharts() {
-  // Get chart data from the hidden div
   const chartDataDiv = document.getElementById('chart-data');
+
+  // 1. Category Chart Data
   let categoryLabels = JSON.parse(chartDataDiv.dataset.categoryLabels);
   let categoryValues = JSON.parse(chartDataDiv.dataset.categoryValues);
 
-  // If no data is provided, default to a single slice "No Data" with value 0
+  // Fallback for no category data
   if (!categoryLabels || categoryLabels.length === 0) {
     categoryLabels = ["No Data"];
     categoryValues = [0];
   }
-  
-  // Create the Category Pie Chart
-  const ctx = document.getElementById('categoryChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'pie',  // You can change this to 'doughnut' for a ring-style chart
+
+  // 2. Monthly Income vs Expense
+  let monthlyIncomePie = parseFloat(chartDataDiv.dataset.monthlyIncomePie) || 0;
+  let monthlyExpensePie = parseFloat(chartDataDiv.dataset.monthlyExpensePie) || 0;
+
+  // CATEGORY PIE CHART
+  const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+  new Chart(categoryCtx, {
+    type: 'pie',
     data: {
       labels: categoryLabels,
       datasets: [{
         data: categoryValues,
         backgroundColor: [
-          '#3498db',
-          '#2ecc71',
-          '#f1c40f',
-          '#e74c3c',
-          '#9b59b6',
-          '#1abc9c',
-          '#34495e',
-          '#e67e22'
-          // Add more colors if needed
+          '#3498db','#2ecc71','#f1c40f','#e74c3c',
+          '#9b59b6','#1abc9c','#34495e','#e67e22'
         ],
-        borderColor: '#ffffff', // white outer boundary for each slice
+        borderColor: '#ffffff',
         borderWidth: 2
       }]
     },
     options: {
       plugins: {
-        legend: {
-          position: 'bottom'
-        }
+        legend: { position: 'bottom' }
       },
-      layout: {
-        padding: 10
-      }
+      layout: { padding: 10 }
+    }
+  });
+
+  // MONTHLY INCOME VS EXPENSE PIE CHART
+  const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+
+  // If both monthlyIncomePie and monthlyExpensePie are 0, fallback to a "No Data" slice
+  let monthlyLabels, monthlyValues, monthlyColors;
+  if (monthlyIncomePie === 0 && monthlyExpensePie === 0) {
+    monthlyLabels = ["No Data"];
+    monthlyValues = [0];
+    monthlyColors = ["#bdc3c7"]; // grey or any fallback color
+  } else {
+    monthlyLabels = ["Income", "Expense"];
+    monthlyValues = [monthlyIncomePie, monthlyExpensePie];
+    monthlyColors = ["#2ecc71", "#e74c3c"]; // green & red
+  }
+
+  new Chart(monthlyCtx, {
+    type: 'pie',
+    data: {
+      labels: monthlyLabels,
+      datasets: [{
+        data: monthlyValues,
+        backgroundColor: monthlyColors,
+        borderColor: '#ffffff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { position: 'bottom' }
+      },
+      layout: { padding: 10 }
     }
   });
 }

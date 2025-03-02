@@ -184,7 +184,7 @@ app.get('/transactions', verifyToken, (req, res) => {
 
 app.get('/report', verifyToken, async (req, res) => {
     try {
-        // Aggregation for monthly summary (example, already working in your code)
+        // 1. Existing monthly summary
         const monthlySummary = await Transaction.aggregate([
             {
                 $match: {
@@ -207,14 +207,13 @@ app.get('/report', verifyToken, async (req, res) => {
                         $sum: {
                             $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0]
                         }
-                    },
-                    count: { $sum: 1 }
+                    }
                 }
             },
             { $sort: { "_id.year": -1, "_id.month": -1 } }
         ]);
 
-        // Aggregate transaction amounts by category for the pie chart.
+        // 2. Category breakdown for the first (category) pie chart
         const categoryAggregation = await Transaction.aggregate([
             {
                 $match: {
@@ -229,21 +228,64 @@ app.get('/report', verifyToken, async (req, res) => {
             },
             { $sort: { total: -1 } }
         ]);
-
         const categoryLabels = categoryAggregation.map(c => c._id);
         const categoryValues = categoryAggregation.map(c => c.total);
 
-        // If no data is found, default to a single slice labeled "No Data" with value 0.
+        // Fallback if no category data
         if (categoryLabels.length === 0) {
             categoryLabels.push("No Data");
             categoryValues.push(0);
         }
 
-        // Prepare monthly labels for your table/chart (if needed)
+        // 3. NEW: Current month income vs. expense
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1;
+
+        const currentMonthStats = await Transaction.aggregate([
+            {
+                $match: {
+                    user: new mongoose.Types.ObjectId(req.user.id),
+                    date: { $exists: true },
+                    // year/month must match the current year/month
+                    $expr: {
+                        $and: [
+                            { $eq: [{ $year: "$date" }, currentYear] },
+                            { $eq: [{ $month: "$date" }, currentMonth] }
+                        ]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalIncome: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "income"] }, "$amount", 0]
+                        }
+                    },
+                    totalExpense: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0]
+                        }
+                    }
+                }
+            }
+        ]);
+
+        let monthlyIncomePie = 0;
+        let monthlyExpensePie = 0;
+        if (currentMonthStats.length > 0) {
+            monthlyIncomePie = currentMonthStats[0].totalIncome;
+            monthlyExpensePie = currentMonthStats[0].totalExpense;
+        }
+
+        // 4. Prepare monthly labels if you have a monthly chart or table
         const monthlyLabels = monthlySummary.map(m =>
             `${new Date(m._id.year, m._id.month - 1).toLocaleString('default', { month: 'short' })} ${m._id.year}`
         );
 
+        // 5. Render the EJS view
         res.render('report', {
             user: req.user,
             monthlySummary,
@@ -252,17 +294,18 @@ app.get('/report', verifyToken, async (req, res) => {
             monthlyExpenses: monthlySummary.map(m => m.expense),
             categoryLabels,
             categoryValues,
-            categories, // if needed for dropdowns
+            monthlyIncomePie,
+            monthlyExpensePie,
             error: req.flash('error'),
             success: req.flash('success')
         });
-
     } catch (err) {
         console.error(err);
         req.flash('error', 'Error generating reports');
         res.redirect('/dashboard');
     }
 });
+
 
 
 app.get('/transactions/:id/edit', verifyToken, async (req, res) => {

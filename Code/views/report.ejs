@@ -24,19 +24,25 @@
     <main class="dashboard">
         <h1>Financial Reports & Insights</h1>
 
+        <%
+            const totalIncome = monthlySummary.reduce((sum, month) => sum + month.income, 0);
+            const totalExpense = monthlySummary.reduce((sum, month) => sum + month.expense, 0);
+            const netSavings = totalIncome - totalExpense;
+        %>
+
         <!-- Summary Cards -->
         <div class="stats-container">
             <div class="stat-card">
-                <h3>Total Income</h3>
-                <p class="balance">₹<%= monthlySummary.reduce((sum, month) => sum + month.income, 0).toFixed(2) %></p>
+              <h3>Total Income</h3>
+              <p class="balance">₹<%= totalIncome.toFixed(2) %></p>
             </div>
             <div class="stat-card">
-                <h3>Total Expenses</h3>
-                <p class="budget">₹<%= monthlySummary.reduce((sum, month) => sum + month.expense, 0).toFixed(2) %></p>
+              <h3>Total Expenses</h3>
+              <p class="budget">₹<%= totalExpense.toFixed(2) %></p>
             </div>
             <div class="stat-card">
-                <h3>Net Savings</h3>
-                <p class="balance">₹<%= (monthlySummary.reduce((sum, month) => sum + month.income, 0) - monthlySummary.reduce((sum, month) => sum + month.expense, 0)).toFixed(2) %></p>
+              <h3>Net Savings</h3>
+              <p class="<%= netSavings >= 0 ? 'balance' : 'budget' %>">₹<%= netSavings.toFixed(2) %></p>
             </div>
         </div>
 
