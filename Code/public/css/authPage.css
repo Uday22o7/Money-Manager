@@ -18,11 +18,13 @@ body {
     flex-direction: column;
     background: #f8f9fa;
     font-family: 'Arial', sans-serif;
-  }
+}
+
 
 /* Navigation Bar */
 nav {
-    flex: 0 0 auto; /* or flex-shrink: 0 */
+    flex: 0 0 auto;
+    /* or flex-shrink: 0 */
     width: 100%;
     padding: 20px 50px;
     display: flex;
@@ -30,24 +32,25 @@ nav {
     align-items: center;
     background: #ffffff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  .logo {
+.logo {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-  }
-  
-  .logo-svg {
+}
+
+.logo-svg {
     width: 40px;
     height: 40px;
-  }
+}
 
-  .logo span {
+.logo span {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #3498db; /* Brand color */
-  }
+    color: #3498db;
+    /* Brand color */
+}
 
 .blueButton {
     background-color: var(--mcolor);
@@ -93,18 +96,62 @@ nav {
     opacity: 1;
 }
 
+/* Add to your existing CSS */
+/* Flash Messages */
+.alert {
+    padding: 1rem;
+    border-radius: 5px;
+    max-width: 800px;
+    text-align: center;
+    position: fixed;
+    top: 20px; /* 20px from the top of the viewport */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.5s ease-out;
+    opacity: 1;
+  }
+  
+  .alert-error {
+    background: #fee;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+  }
+  
+  .alert-success {
+    background: #efefef;
+    border: 1px solid #2ecc71;
+    color: #2ecc71;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%);
+    }
+  }
+  
+
+
+
 
 /* auth container */
 
 .auth-container {
-    flex: 1 0 auto; /* Takes all remaining space */
+    flex: 1 0 auto;
+    /* Takes all remaining space */
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-  }
+}
 
-  .form-container {
+.form-container {
     position: relative;
     width: 100%;
     max-width: 768px;
@@ -112,9 +159,9 @@ nav {
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1),
-                0 10px 10px rgba(0, 0, 0, 0.1);
+        0 10px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-  }
+}
 
 .form {
     position: absolute;

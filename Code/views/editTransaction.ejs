@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Transaction - Money Manager</title>
+  <link rel="stylesheet" href="/css/transaction.css" />
+</head>
+<body>
+  <!-- Navigation (similar to your dashboard nav) -->
+  <nav class="nav">
+    <div class="logo">
+      <img src="/img/piggy-bank-svgrepo-com.svg" class="logo-svg" alt="Money Manager Logo" />
+      <span>Money Manager</span>
+    </div>
+    <div class="nav-links">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/transactions">Transactions</a>
+      <a href="/budgets">Budgets</a>
+      <a href="/reports">Reports</a>
+      <button id="logoutBtn"><a style="color: white;" href="/logout">Logout</a></button>
+    </div>
+  </nav>
+
+  <main class="dashboard">
+    <section class="transaction-form">
+      <h2>Edit Transaction</h2>
+      <form action="/transactions/<%= transaction._id %>/edit" method="POST">
+        <div class="form-group">
+          <label>Amount</label>
+          <input type="number" name="amount" step="0.01" value="<%= transaction.amount %>" required>
+        </div>
+        <div class="form-group">
+          <label>Account</label>
+          <select name="account" required>
+            <option value="cash" <%= transaction.account === 'cash' ? 'selected' : '' %>>Cash</option>
+            <option value="bank" <%= transaction.account === 'bank' ? 'selected' : '' %>>Bank</option>
+            <option value="credit" <%= transaction.account === 'credit' ? 'selected' : '' %>>Credit</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select name="type" required>
+            <option value="income" <%= transaction.type === 'income' ? 'selected' : '' %>>Income</option>
+            <option value="expense" <%= transaction.type === 'expense' ? 'selected' : '' %>>Expense</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select name="categories" required>
+            <% categories.forEach(category => { %>
+              <option value="<%= category %>" <%= transaction.categories === category ? 'selected' : '' %>><%= category %></option>
+            <% }); %>
+          </select>
+        </div>
+        <button type="submit" class="submit-btn">Update Transaction</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

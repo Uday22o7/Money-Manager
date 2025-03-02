@@ -1,0 +1,354 @@
+/* ---------------------- */
+/*       GLOBAL RESET     */
+/* ---------------------- */
+:root {
+  --mcolor: #007bff;
+  --scolor: rgb(43, 43, 43);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  /* Change to your preferred font */
+}
+
+/* For modern browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar */
+}
+
+html {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+  overflow-y: scroll;
+  /* Allow vertical scrolling */
+}
+
+
+/* ---------------------- */
+/*       BODY & NAV       */
+/* ---------------------- */
+body {
+  background: #f0f2f5;
+  /* Light, modern background */
+}
+
+/* Sticky top nav */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-svg {
+  width: 40px;
+  height: 40px;
+}
+
+.logo span {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--mcolor);
+  /* Brand color */
+}
+
+/* Nav links and logout button */
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #2c3e50;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #3498db;
+}
+
+.nav-links a.active {
+  color: #3498db;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.25rem;
+}
+
+/* Logout button */
+#logoutBtn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#logoutBtn:hover {
+  background: #c0392b;
+}
+
+
+/* Add to your existing CSS */
+/* Flash Messages */
+.alert {
+  padding: 1rem;
+  border-radius: 5px;
+  max-width: 800px;
+  text-align: center;
+  position: fixed;
+  top: 20px; /* 20px from the top of the viewport */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.5s ease-out;
+  opacity: 1;
+}
+
+.alert-error {
+  background: #fee;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+}
+
+.alert-success {
+  background: #efefef;
+  border: 1px solid #2ecc71;
+  color: #2ecc71;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+
+
+
+/* ---------------------- */
+/*     DASHBOARD MAIN     */
+/* ---------------------- */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---------------------- */
+/*     STATS CONTAINER    */
+/* ---------------------- */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.stat-card h3 {
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.balance {
+  font-size: 1.8rem;
+  color: #2ecc71;
+  font-weight: 700;
+}
+
+.budget {
+  font-size: 1.8rem;
+  color: #e67e22;
+  font-weight: 700;
+}
+
+/* ---------------------- */
+/*  ADD TRANSACTION FORM  */
+/* ---------------------- */
+.transaction-form {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.transaction-form h2 {
+  margin-bottom: 1rem;
+  color: var(--mcolor);
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.submit-btn {
+  background: var(--mcolor);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.submit-btn:hover {
+  background: #2980b9;
+}
+
+/* ---------------------- */
+/* RECENT TRANSACTIONS    */
+/* ---------------------- */
+.recent-transactions {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.recent-transactions h2 {
+  margin-bottom: 1rem;
+  color: #3498db;
+  font-weight: 600;
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #f8f9fa;
+  border-left: 4px solid var(--mcolor);
+  transition: all 0.3s ease;
+}
+
+.transaction-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Category Colors */
+.transaction-item.food {
+  border-color: #2ecc71;
+  background-color: rgba(46, 204, 113, 0.1);
+}
+
+.transaction-item.transport {
+  border-color: #3498db;
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.transaction-item.healthcare {
+  border-color: #9b59b6;
+  background-color: rgba(155, 89, 182, 0.1);
+}
+
+.transaction-item.shopping {
+  border-color: #f1c40f;
+  background-color: rgba(241, 196, 15, 0.1);
+}
+
+.transaction-item.investment {
+  border-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.transaction-item.entertainment {
+  border-color: #e67e22;
+  background-color: rgba(230, 126, 34, 0.1);
+}
+
+/* ---------------------- */
+/*     RESPONSIVE CSS     */
+/* ---------------------- */
+@media (max-width: 768px) {
+  .nav-links {
+    gap: 1rem;
+  }
+
+  .dashboard {
+    padding: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .transaction-form,
+  .recent-transactions {
+    padding: 1rem;
+  }
+
+  .transaction-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

@@ -22,6 +22,17 @@
         <button class="blueButton"> <a class="sign_up" href="/auth">Sign Up</a> </button>
     </nav>
 
+    <% if (error.length > 0) { %>
+        <div class="alert alert-error">
+            <%= error %>
+        </div>
+    <% } %>
+    
+    <% if (success.length > 0) { %>
+        <div class="alert alert-success">
+            <%= success %>
+        </div>
+    <% } %>
 
 
     <div class="auth-container">
@@ -81,6 +92,17 @@
     </div>
 
     <script src="/js/authPage.js"></script>
+    <script>
+        setTimeout(() => {
+          const alertElem = document.querySelector('.alert');
+          if(alertElem) {
+            alertElem.style.transition = 'opacity 0.5s ease-out';
+            alertElem.style.opacity = '0';
+            setTimeout(() => alertElem.remove(), 500); // remove after fade out
+          }
+        }, 2000);
+      </script>
+      
 </body>
 
 </html>

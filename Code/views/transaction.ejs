@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - Money Manager</title>
+    <link rel="stylesheet" href="/css/transaction.css"> <!-- Reuse existing styles -->
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="logo">
+            <img src="/img/piggy-bank-svgrepo-com.svg" class="logo-svg" alt="Money Manager Logo" />
+            <span>Money Manager</span>
+        </div>
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/transactions" class="active">Transactions</a>
+            <a href="/budgets">Budgets</a>
+            <a href="/reports">Reports</a>
+            <button id="logoutBtn"> <a style="color: white;" href="/logout">Logout</a> </button>
+        </div>
+    </nav>
+
+    <% if (error.length > 0) { %>
+        <div class="alert alert-error">
+            <%= error %>
+        </div>
+    <% } %>
+    
+    <% if (success.length > 0) { %>
+        <div class="alert alert-success">
+            <%= success %>
+        </div>
+    <% } %>
+
+    <main class="dashboard">
+        <!-- Move transaction form here -->
+        <section class="transaction-form">
+            <h2>Add New Transaction</h2>
+            <form action="/transactions" method="POST">
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" name="amount" step="0.01" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Account</label>
+                    <select name="account" required>
+                        <option value="cash">Cash</option>
+                        <option value="bank">Bank</option>
+                        <option value="credit">Credit</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Type</label>
+                    <select name="type" required>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="categories" required>
+                        <% for(let category of categories){ %>
+                            <option value="<%= category %>"><%= category %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Add Transaction</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        setTimeout(() => {
+          const alertElem = document.querySelector('.alert');
+          if(alertElem) {
+            alertElem.style.transition = 'opacity 0.5s ease-out';
+            alertElem.style.opacity = '0';
+            setTimeout(() => alertElem.remove(), 500); // remove after fade out
+          }
+        }, 2000);
+    </script>
+      
+</body>
+
+</html>
