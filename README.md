@@ -45,4 +45,4 @@ cp .env.example .env
 # Update values in .env file
 
 # Start development server
-npm run dev
+node app.js
