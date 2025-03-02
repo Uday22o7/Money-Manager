@@ -1,3 +1,5 @@
+<!-- dashboard.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,10 +11,10 @@
 </head>
 
 <body>
-  <!-- Top Navigation -->
   <nav class="nav">
     <div class="logo">
-      <img src="/img/piggy-bank-svgrepo-com.svg" class="logo-svg" alt="Money Manager Logo" />
+      <img src="https://res.cloudinary.com/dcjtbfnww/image/upload/v1740935604/piggy-bank-svgrepo-com_rosebd.svg"
+        class="logo-svg" alt="Money Manager Logo" />
       <span>Money Manager</span>
     </div>
     <div class="nav-links">
@@ -20,64 +22,98 @@
       <a href="/transactions">Transactions</a>
       <a href="/budgets">Budgets</a>
       <a href="/reports">Reports</a>
-      <button id="logoutBtn"> <a style="color: white;" href="/logout">Logout</a> </button>
+      <button id="logoutBtn"><a style="color: white;" href="/logout">Logout</a></button>
     </div>
   </nav>
 
-  <!-- Main Content -->
   <main class="dashboard">
-    <!-- Quick Stats -->
-    <div class="stats-container">
-      <div class="stat-card">
-        <h3>Current Balance</h3>
-        <p class="balance">₹0.00</p>
-      </div>
-      <div class="stat-card">
-        <h3>Monthly Budget</h3>
-        <p class="budget">₹0.00</p>
-      </div>
-    </div>
+    <!-- Period Selection Dropdown -->
+    <form action="/dashboard" method="get" class="period-form">
+      <label for="period-select" class="period-label">View:</label>
+      <select name="period" id="period-select" onchange="this.form.submit()">
+        <option value="daily"   <%= period === 'daily' ? 'selected' : '' %>>Daily</option>
+        <option value="weekly"  <%= period === 'weekly' ? 'selected' : '' %>>Weekly</option>
+        <option value="monthly" <%= period === 'monthly' ? 'selected' : '' %>>Monthly</option>
+        <option value="yearly"  <%= period === 'yearly' ? 'selected' : '' %>>Yearly</option>
+        <option value="total"   <%= period === 'total' ? 'selected' : '' %>>Total</option>
+      </select>
+    </form>
+    
 
-  <% if (error.length > 0) { %>
+
+    <!-- Display Flash Messages (if any) -->
+    <% if (error && error.length> 0) { %>
       <div class="alert alert-error">
         <%= error[0] %>
       </div>
-  <% } %>
-  
-  <% if (success.length > 0) { %>
-      <div class="alert alert-success">
-          <%= success %>
-      </div>
-  <% } %>
-
-    <!-- Recent Transactions -->
-    <section class="recent-transactions">
-      <h2>Recent Transactions</h2>
-      <div class="transactions-list">
-        <% transactions.forEach(transaction => { %>
-          <div class="transaction-item <%= transaction.type %>">
-            <span class="amount">₹<%= transaction.amount.toFixed(2) %></span>
-            <span class="account"><%= transaction.account %></span>
-            <span class="category"><%= transaction.categories %></span>
-            <span class="date"><%= new Date(transaction.date).toLocaleDateString() %></span>
-            <!-- Edit and Delete buttons -->
-            <a href="/transactions/<%= transaction._id %>/edit" class="edit-btn">Edit</a>
-            <form action="/transactions/<%= transaction._id %>/delete" method="POST" style="display:inline;">
-              <button type="submit" class="delete-btn">Delete</button>
-            </form>
+      <% } %>
+        <% if (success && success.length> 0) { %>
+          <div class="alert alert-success">
+            <%= success[0] %>
           </div>
-        <% }); %>
-      </div>
-    </section>
-  </main>
+          <% } %>
 
-  <!-- <script>
+            <!-- Quick Stats for Selected Period -->
+            <div class="stats-container">
+              <div class="stat-card">
+                <h3>Income (<%= period %>)</h3>
+                <p class="balance">₹<%= income.toFixed(2) %>
+                </p>
+              </div>
+              <div class="stat-card">
+                <h3>Expense (<%= period %>)</h3>
+                <p class="budget">₹<%= expense.toFixed(2) %>
+                </p>
+              </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <section class="recent-transactions">
+              <h2>Recent Transactions (<%= period %>)</h2>
+              <div class="transactions-list">
+                <% transactions.forEach(transaction=> { %>
+                  <div class="transaction-item <%= transaction.type %>">
+                    <span class="amount">₹<%= transaction.amount.toFixed(2) %></span>
+                    <span class="account">
+                      <%= transaction.account %>
+                    </span>
+                    <span class="category">
+                      <%= transaction.categories %>
+                    </span>
+                    <span class="date">
+                      <%= new Date(transaction.date).toLocaleDateString() %>
+                    </span>
+                    <!-- Edit & Delete -->
+                    <a href="/transactions/<%= transaction._id %>/edit" class="edit-btn">Edit</a>
+                    <form action="/transactions/<%= transaction._id %>/delete" method="POST" style="display:inline;">
+                      <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                  </div>
+                  <% }); %>
+              </div>
+            </section>
+  </main>
+  <script>
+    setTimeout(() => {
+      const alertElem = document.querySelector('.alert');
+      if (alertElem) {
+        alertElem.style.transition = 'opacity 0.5s ease-out';
+        alertElem.style.opacity = '0';
+        setTimeout(() => alertElem.remove(), 500); // remove after fade out
+      }
+    }, 2000);
+  </script> 
+</body>
+
+</html>
+
+
+
+
+<!-- <script>
     // Logout functionality
     document.getElementById('logoutBtn').addEventListener('click', () => {
       localStorage.removeItem('token');
       window.location.href = '/auth';
     });
   </script> -->
-</body>
-
-</html>

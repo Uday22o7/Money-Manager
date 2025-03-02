@@ -82,6 +82,42 @@ const verifyToken = (req, res, next) => {
 };
 
 
+function isInPeriod(txDate, now, period) {
+    switch (period) {
+        case 'daily':
+            return (
+                txDate.getFullYear() === now.getFullYear() &&
+                txDate.getMonth() === now.getMonth() &&
+                txDate.getDate() === now.getDate()
+            );
+        case 'weekly':
+            const startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday as start
+            startOfWeek.setHours(0, 0, 0, 0);
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 7);
+            return txDate >= startOfWeek && txDate < endOfWeek;
+        case 'monthly':
+            return (
+                txDate.getFullYear() === now.getFullYear() &&
+                txDate.getMonth() === now.getMonth()
+            );
+        case 'yearly':
+            return txDate.getFullYear() === now.getFullYear();
+        case 'total':
+            return true;
+        default:
+            return (
+                txDate.getFullYear() === now.getFullYear() &&
+                txDate.getMonth() === now.getMonth() &&
+                txDate.getDate() === now.getDate()
+            );
+    }
+}
+
+
+
+
 
 // Routes
 
@@ -93,18 +129,47 @@ app.get("/auth", (req, res) => {
     res.render("./authPage.ejs")
 });
 
+
 app.get('/dashboard', verifyToken, async (req, res) => {
     try {
-        // Retrieve transactions that belong to the logged-in user
-        const transactions = await Transaction.find({ user: req.user.id });
-        // Pass transactions to the dashboard view along with user info
-        res.render('./dashboard.ejs', { user: req.user, transactions });
+        const period = req.query.period || 'daily'; // default to 'daily' if none provided
+
+
+        const allTransactions = await Transaction.find({ user: req.user.id });
+        const now = new Date();
+
+        let filteredTransactions = [];
+        let income = 0;
+        let expense = 0;
+
+        allTransactions.forEach(tx => {
+            const txDate = new Date(tx.date);
+            if (isInPeriod(txDate, now, period)) {
+                filteredTransactions.push(tx);
+                if (tx.type === 'income') {
+                    income += tx.amount;
+                } else {
+                    expense += tx.amount;
+                }
+            }
+        });
+
+        res.render('dashboard', {
+            user: req.user,
+            period,
+            transactions: filteredTransactions,
+            income,
+            expense,
+            error: res.locals.error,
+            success: res.locals.success
+        });
     } catch (err) {
         console.error(err);
         req.flash('error', 'Error fetching transactions');
         res.redirect('/dashboard?error=Error fetching transactions');
     }
 });
+
 
 
 app.get('/transactions', verifyToken, (req, res) => {
