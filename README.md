@@ -1,8 +1,5 @@
 # 💰 Money Manager
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js CI](https://github.com/yourusername/money-manager/actions/workflows/node.js.yml/badge.svg)](https://github.com/yourusername/money-manager/actions)
-[![Open Issues](https://img.shields.io/github/issues-raw/yourusername/money-manager)](https://github.com/yourusername/money-manager/issues)
 
 **AI-Powered Personal Finance Management System**
 
