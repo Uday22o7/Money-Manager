@@ -8,7 +8,7 @@
 
 Money Manager is an intelligent web application that helps users track expenses, optimize budgets, and achieve financial goals through AI-driven insights. Built for the modern digital consumer, it combines automated transaction categorization with predictive financial analytics.
 
-![App Screenshot](Money Manager.png) <!-- Add your screenshot path -->
+![App Screenshot](https://github.com/Uday22o7/Paise-Controller/blob/main/Money%20Manager.png) <!-- Add your screenshot path -->
 
 ---
 
