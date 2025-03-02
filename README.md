@@ -1,7 +1,6 @@
 # 💰 Money Manager
 
-
-**AI-Powered Personal Finance Management System**
+**Personal Finance Management System**
 
 ---
 
@@ -15,14 +14,12 @@ Money Manager is an intelligent web application that helps users track expenses,
 
 ## ✨ Features
 
-- **🤖 AI Transaction Categorization**  
-  Automatically classifies expenses using machine learning
+- **💵Transaction Categorization**  
+  Classifies expenses
 - **🔒 Bank-Grade Security**  
   256-bit encryption & JWT authentication
 - **📊 Interactive Dashboard**  
-  Visualize finances with D3.js charts
-- **🌐 Multi-Account Sync**  
-  Connect unlimited bank accounts
+  Visualize finances with charts.js charts
 - 📱 **Responsive Design**  
   Works seamlessly on all devices
 
