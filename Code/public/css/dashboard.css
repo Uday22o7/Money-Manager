@@ -342,6 +342,53 @@ html {
   border-color: #3498db;
 }
 
+#category-select{
+  appearance: none;              /* Remove default dropdown arrow */
+  -webkit-appearance: none;      /* Safari/Chrome */
+  -moz-appearance: none;         /* Firefox */
+  
+  background-color: #ffffff;     /* White background to match your cards/nav */
+  border: 1px solid #ddd;        /* Subtle border */
+  border-radius: 5px;            /* Rounded corners */
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif; /* Match your font */
+  color: #2c3e50;                /* Text color */
+  padding: 0.6rem 1.5rem 0.6rem 1rem; 
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  
+  /* Custom arrow icon (SVG data URI). Adjust size/position as needed. */
+  background: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='%233498db' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 0.7rem center/1rem 1rem;
+}
+
+
+/* Add to your existing CSS */
+.filter-group {
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.filter-group label {
+  margin-right: 8px;
+}
+
+.period-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: white;
+}
+
+
+
 /* Flash Messages */
 .alert {
   padding: 1rem;

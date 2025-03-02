@@ -20,8 +20,7 @@
     <div class="nav-links">
       <a href="/dashboard" class="active">Dashboard</a>
       <a href="/transactions">Transactions</a>
-      <a href="/budgets">Budgets</a>
-      <a href="/reports">Reports</a>
+      <a href="/report">Reports</a>
       <button id="logoutBtn"><a style="color: white;" href="/logout">Logout</a></button>
     </div>
   </nav>
@@ -37,8 +36,18 @@
         <option value="yearly"  <%= period === 'yearly' ? 'selected' : '' %>>Yearly</option>
         <option value="total"   <%= period === 'total' ? 'selected' : '' %>>Total</option>
       </select>
+      
+      <div class="filter-group">
+        <label for="category-select" class="period-label">Category:</label>
+        <select name="category" id="category-select" onchange="this.form.submit()">
+          <option value="">All Categories</option>
+          <% categories.forEach(function(cat) { %>
+            <option value="<%= cat %>" <%= selectedCategory === cat ? 'selected' : '' %>><%= cat %></option>
+          <% }); %>
+          </select>
+      </div>
+        
     </form>
-    
 
 
     <!-- Display Flash Messages (if any) -->
@@ -69,7 +78,7 @@
 
             <!-- Recent Transactions -->
             <section class="recent-transactions">
-              <h2>Recent Transactions (<%= period %>)</h2>
+              <h2>Recent Transactions <% if (selectedCategory) { %> - <%= selectedCategory %><% } %> (<%= period %>)</h2>
               <div class="transactions-list">
                 <% transactions.forEach(transaction=> { %>
                   <div class="transaction-item <%= transaction.type %>">

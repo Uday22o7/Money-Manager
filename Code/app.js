@@ -133,7 +133,7 @@ app.get("/auth", (req, res) => {
 app.get('/dashboard', verifyToken, async (req, res) => {
     try {
         const period = req.query.period || 'daily'; // default to 'daily' if none provided
-
+        const selectedCategory = req.query.category || null;
 
         const allTransactions = await Transaction.find({ user: req.user.id });
         const now = new Date();
@@ -144,7 +144,8 @@ app.get('/dashboard', verifyToken, async (req, res) => {
 
         allTransactions.forEach(tx => {
             const txDate = new Date(tx.date);
-            if (isInPeriod(txDate, now, period)) {
+            const categoryMatch = !selectedCategory || tx.categories === selectedCategory;
+            if (isInPeriod(txDate, now, period) && categoryMatch) {
                 filteredTransactions.push(tx);
                 if (tx.type === 'income') {
                     income += tx.amount;
@@ -157,9 +158,11 @@ app.get('/dashboard', verifyToken, async (req, res) => {
         res.render('dashboard', {
             user: req.user,
             period,
+            selectedCategory,
             transactions: filteredTransactions,
             income,
             expense,
+            categories, // Pass categories to the view
             error: res.locals.error,
             success: res.locals.success
         });
@@ -178,6 +181,94 @@ app.get('/transactions', verifyToken, (req, res) => {
         categories: categories
     });
 });
+
+app.get('/report', verifyToken, async (req, res) => {
+    try {
+        // Get monthly summary (your existing aggregation)
+        const monthlySummary = await Transaction.aggregate([
+            {
+                $match: {
+                    user: new mongoose.Types.ObjectId(req.user.id),
+                    date: { $exists: true }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$date" },
+                        month: { $month: "$date" }
+                    },
+                    income: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "income"] }, "$amount", 0]
+                        }
+                    },
+                    expense: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0]
+                        }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { "_id.year": -1, "_id.month": -1 } }
+        ]);
+
+        // Add category breakdown aggregation
+        const categoryBreakdown = await Transaction.aggregate([
+            {
+                $match: {
+                    user: new mongoose.Types.ObjectId(req.user.id),
+                    type: "expense"
+                }
+            },
+            {
+                $group: {
+                    _id: "$categories",
+                    total: { $sum: "$amount" },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { total: -1 } }
+        ]);
+
+        // Format data for charts
+        const monthlyLabels = monthlySummary.map(m =>
+            `${new Date(m._id.year, m._id.month - 1).toLocaleString('default', { month: 'short' })} ${m._id.year}`
+        );
+
+        const chartData = {
+            monthly: {
+                income: monthlySummary.map(m => m.income),
+                expense: monthlySummary.map(m => m.expense)
+            },
+            categories: {
+                labels: categoryBreakdown.map(c => c._id),
+                values: categoryBreakdown.map(c => c.total)
+            }
+        };
+
+        res.render('report', {
+            user: req.user,
+            monthlySummary,
+            monthlyLabels,
+            monthlyIncome: chartData.monthly.income,
+            monthlyExpenses: chartData.monthly.expense,
+            categoryLabels: chartData.categories.labels,
+            categoryValues: chartData.categories.values,
+            categories, // Pass the categories array if needed in dropdowns
+            error: req.flash('error'),
+            success: req.flash('success')
+        });
+
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'Error generating reports');
+        res.redirect('/dashboard');
+    }
+});
+
+
 
 app.get('/transactions/:id/edit', verifyToken, async (req, res) => {
     try {

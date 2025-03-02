@@ -1,0 +1,543 @@
+/* ---------------------- */
+/*       GLOBAL RESET     */
+/* ---------------------- */
+:root {
+  --mcolor: #007bff;
+  --scolor: rgb(43, 43, 43);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  /* Change to your preferred font */
+}
+
+/* For modern browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar */
+}
+
+html {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+  overflow-y: scroll;
+  /* Allow vertical scrolling */
+}
+
+
+/* ---------------------- */
+/*       BODY & NAV       */
+/* ---------------------- */
+body {
+  background: #f0f2f5;
+  /* Light, modern background */
+}
+
+/* Sticky top nav */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-svg {
+  width: 40px;
+  height: 40px;
+}
+
+.logo span {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--mcolor);
+  /* Brand color */
+}
+
+/* Nav links and logout button */
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #2c3e50;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #3498db;
+}
+
+.nav-links a.active {
+  color: #3498db;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 0.25rem;
+}
+
+/* Logout button */
+#logoutBtn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#logoutBtn:hover {
+  background: #c0392b;
+}
+
+/* ---------------------- */
+/*     DASHBOARD MAIN     */
+/* ---------------------- */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard h1{
+  color: var(--mcolor);
+}
+
+/* ---------------------- */
+/*     STATS CONTAINER    */
+/* ---------------------- */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.stat-card h3 {
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.balance {
+  font-size: 1.8rem;
+  color: #2ecc71;
+  font-weight: 700;
+}
+
+.budget {
+  font-size: 1.8rem;
+  color: #e67e22;
+  font-weight: 700;
+}
+
+/* ---------------------- */
+/*  ADD TRANSACTION FORM  */
+/* ---------------------- */
+.transaction-form {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.transaction-form h2 {
+  margin-bottom: 1rem;
+  color: var(--mcolor);
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.submit-btn {
+  background: var(--mcolor);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.submit-btn:hover {
+  background: #2980b9;
+}
+
+/* ---------------------- */
+/* RECENT TRANSACTIONS    */
+/* ---------------------- */
+.recent-transactions {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.recent-transactions h2 {
+  margin-bottom: 1rem;
+  color: #3498db;
+  font-weight: 600;
+}
+
+/* Container for transactions list */
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Each transaction item */
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #f8f9fa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.transaction-item:hover {
+  transform: translateY(-2px);
+}
+
+/* Default styling for spans */
+.transaction-item span {
+  flex: 1;
+  text-align: center;
+}
+
+/* Highlight the amount based on transaction type */
+.transaction-item.income .amount {
+  color: #2ecc71;
+  /* Green for income */
+  font-weight: bold;
+}
+
+.transaction-item.expense .amount {
+  color: #e74c3c;
+  /* Red for expense */
+  font-weight: bold;
+}
+
+/* Optional: Adjust spacing for account, category, and date */
+.transaction-item .account,
+.transaction-item .category,
+.transaction-item .date {
+  font-size: 0.95rem;
+  color: #2c3e50;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin: 0 0.25rem;
+}
+
+.edit-btn {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background-color: #2980b9;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+.period-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+/* Label styling to match your site’s look */
+.period-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2c3e50;
+  /* Adjust to your brand color */
+}
+
+/* Modern dropdown styling */
+#period-select {
+  appearance: none;
+  /* Remove default dropdown arrow */
+  -webkit-appearance: none;
+  /* Safari/Chrome */
+  -moz-appearance: none;
+  /* Firefox */
+
+  background-color: #ffffff;
+  /* White background to match your cards/nav */
+  border: 1px solid #ddd;
+  /* Subtle border */
+  border-radius: 5px;
+  /* Rounded corners */
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  /* Match your font */
+  color: #2c3e50;
+  /* Text color */
+  padding: 0.6rem 1.5rem 0.6rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+
+  /* Custom arrow icon (SVG data URI). Adjust size/position as needed. */
+  background: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='%233498db' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 0.7rem center/1rem 1rem;
+}
+
+/* Hover/Focus effects */
+#period-select:hover {
+  border-color: #3498db;
+}
+
+#period-select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+#category-select {
+  appearance: none;
+  /* Remove default dropdown arrow */
+  -webkit-appearance: none;
+  /* Safari/Chrome */
+  -moz-appearance: none;
+  /* Firefox */
+
+  background-color: #ffffff;
+  /* White background to match your cards/nav */
+  border: 1px solid #ddd;
+  /* Subtle border */
+  border-radius: 5px;
+  /* Rounded corners */
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  /* Match your font */
+  color: #2c3e50;
+  /* Text color */
+  padding: 0.6rem 1.5rem 0.6rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+
+  /* Custom arrow icon (SVG data URI). Adjust size/position as needed. */
+  background: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='%233498db' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 0.7rem center/1rem 1rem;
+}
+
+
+/* Add to your existing CSS */
+.filter-group {
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.filter-group label {
+  margin-right: 8px;
+}
+
+.period-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: white;
+}
+
+/* Charts */
+/* Chart Styles */
+.chart-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.chart-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Table Styles */
+.monthly-breakdown h2{
+  color: var(--mcolor);
+}
+
+.monthly-breakdown {
+  margin-top: 2rem;
+}
+
+.monthly-breakdown table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.monthly-breakdown th, 
+.monthly-breakdown td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Monthly Breakdown Table */
+.monthly-breakdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.monthly-breakdown th,
+.monthly-breakdown td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.monthly-breakdown th {
+  background-color: #f8f9fa;
+}
+
+.monthly-breakdown tr:hover {
+  background-color: #f5f5f5;
+}
+
+
+/* Flash Messages */
+.alert {
+  padding: 1rem;
+  border-radius: 5px;
+  max-width: 800px;
+  text-align: center;
+  position: fixed;
+  top: 20px;
+  /* 20px from the top of the viewport */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.5s ease-out;
+  opacity: 1;
+}
+
+.alert-error {
+  background: #fee;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+}
+
+.alert-success {
+  background: #efefef;
+  border: 1px solid #2ecc71;
+  color: #2ecc71;
+}
+
+.tincome {
+  color: #2ecc71;
+}
+
+.texpense {
+  color: #e67e22;
+}
+
+/* ---------------------- */
+/*     RESPONSIVE CSS     */
+/* ---------------------- */
+@media (max-width: 768px) {
+  .nav-links {
+    gap: 1rem;
+  }
+
+  .dashboard {
+    padding: 1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .transaction-form,
+  .recent-transactions {
+    padding: 1rem;
+  }
+
+  .transaction-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

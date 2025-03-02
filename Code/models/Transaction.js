@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const TransactionSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId, // Ensure this type definition
         ref: 'User',
         required: true
     },

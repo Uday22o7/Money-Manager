@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Reports - Money Manager</title>
+    <link rel="stylesheet" href="/css/report.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="logo">
+      <img src="https://res.cloudinary.com/dcjtbfnww/image/upload/v1740935604/piggy-bank-svgrepo-com_rosebd.svg"
+        class="logo-svg" alt="Money Manager Logo" />
+      <span>Money Manager</span>
+    </div>
+    <div class="nav-links">
+      <a href="/dashboard" >Dashboard</a>
+      <a href="/transactions">Transactions</a>
+      <a href="/report" class="active">Reports</a>
+      <button id="logoutBtn"><a style="color: white;" href="/logout">Logout</a></button>
+    </div>
+  </nav>
+
+    <main class="dashboard">
+        <h1>Financial Reports & Insights</h1>
+
+        <!-- Summary Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Income</h3>
+                <p class="balance">₹<%= monthlySummary.reduce((sum, month) => sum + month.income, 0).toFixed(2) %></p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Expenses</h3>
+                <p class="budget">₹<%= monthlySummary.reduce((sum, month) => sum + month.expense, 0).toFixed(2) %></p>
+            </div>
+            <div class="stat-card">
+                <h3>Net Savings</h3>
+                <p class="balance">₹<%= (monthlySummary.reduce((sum, month) => sum + month.income, 0) - monthlySummary.reduce((sum, month) => sum + month.expense, 0)).toFixed(2) %></p>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <!-- <div class="chart-container">
+            <div class="chart-card" style="position: relative; height:400px">
+              <h3>Expense Categories</h3>
+              <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="chart-card" style="position: relative; height:400px">
+              <h3>Income vs Expenses</h3>
+              <canvas id="trendChart"></canvas>
+            </div>
+        </div> -->
+
+        <!-- Monthly Breakdown Table -->
+        <section class="monthly-breakdown">
+            <h2>Monthly Summary</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Income</th>
+                        <th>Expense</th>
+                        <th>Savings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% monthlySummary.forEach(month => { %>
+                        <tr>
+                            <td><%= new Date(month._id.year, month._id.month - 1).toLocaleString('default', { month: 'long', year: 'numeric' }) %></td>
+                            <td class="tincome" >₹<%= month.income.toFixed(2) %></td>
+                            <td class="texpense" >₹<%= month.expense.toFixed(2) %></td>
+                            <td class="tincome" >₹<%= (month.income - month.expense).toFixed(2) %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Add this hidden div to store chart data -->
+    <div id="chart-data" 
+    data-category-labels="<%= JSON.stringify(categoryLabels) %>"
+    data-category-values="<%= JSON.stringify(categoryValues) %>"
+    data-monthly-labels="<%= JSON.stringify(monthlyLabels) %>"
+    data-monthly-income="<%= JSON.stringify(monthlyIncome) %>"
+    data-monthly-expenses="<%= JSON.stringify(monthlyExpenses) %>">
+    </div>
+    
+    <!-- Change the script tag to this -->
+    <script type="module" src="/js/charts.js"></script>
+</body>
+</html>
