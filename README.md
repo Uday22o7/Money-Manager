@@ -17,8 +17,6 @@ Money Manager is an intelligent web application that helps users track expenses,
 
 - **🤖 AI Transaction Categorization**  
   Automatically classifies expenses using machine learning
-- **📈 Predictive Budgeting**  
-  Forecasts spending patterns with 90% accuracy
 - **🔒 Bank-Grade Security**  
   256-bit encryption & JWT authentication
 - **📊 Interactive Dashboard**  
