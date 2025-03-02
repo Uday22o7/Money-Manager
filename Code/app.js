@@ -184,7 +184,7 @@ app.get('/transactions', verifyToken, (req, res) => {
 
 app.get('/report', verifyToken, async (req, res) => {
     try {
-        // Get monthly summary (your existing aggregation)
+        // Aggregation for monthly summary (example, already working in your code)
         const monthlySummary = await Transaction.aggregate([
             {
                 $match: {
@@ -214,49 +214,45 @@ app.get('/report', verifyToken, async (req, res) => {
             { $sort: { "_id.year": -1, "_id.month": -1 } }
         ]);
 
-        // Add category breakdown aggregation
-        const categoryBreakdown = await Transaction.aggregate([
+        // Aggregate transaction amounts by category for the pie chart.
+        const categoryAggregation = await Transaction.aggregate([
             {
                 $match: {
-                    user: new mongoose.Types.ObjectId(req.user.id),
-                    type: "expense"
+                    user: new mongoose.Types.ObjectId(req.user.id)
                 }
             },
             {
                 $group: {
                     _id: "$categories",
-                    total: { $sum: "$amount" },
-                    count: { $sum: 1 }
+                    total: { $sum: "$amount" }
                 }
             },
             { $sort: { total: -1 } }
         ]);
 
-        // Format data for charts
+        const categoryLabels = categoryAggregation.map(c => c._id);
+        const categoryValues = categoryAggregation.map(c => c.total);
+
+        // If no data is found, default to a single slice labeled "No Data" with value 0.
+        if (categoryLabels.length === 0) {
+            categoryLabels.push("No Data");
+            categoryValues.push(0);
+        }
+
+        // Prepare monthly labels for your table/chart (if needed)
         const monthlyLabels = monthlySummary.map(m =>
             `${new Date(m._id.year, m._id.month - 1).toLocaleString('default', { month: 'short' })} ${m._id.year}`
         );
-
-        const chartData = {
-            monthly: {
-                income: monthlySummary.map(m => m.income),
-                expense: monthlySummary.map(m => m.expense)
-            },
-            categories: {
-                labels: categoryBreakdown.map(c => c._id),
-                values: categoryBreakdown.map(c => c.total)
-            }
-        };
 
         res.render('report', {
             user: req.user,
             monthlySummary,
             monthlyLabels,
-            monthlyIncome: chartData.monthly.income,
-            monthlyExpenses: chartData.monthly.expense,
-            categoryLabels: chartData.categories.labels,
-            categoryValues: chartData.categories.values,
-            categories, // Pass the categories array if needed in dropdowns
+            monthlyIncome: monthlySummary.map(m => m.income),
+            monthlyExpenses: monthlySummary.map(m => m.expense),
+            categoryLabels,
+            categoryValues,
+            categories, // if needed for dropdowns
             error: req.flash('error'),
             success: req.flash('success')
         });
@@ -267,7 +263,6 @@ app.get('/report', verifyToken, async (req, res) => {
         res.redirect('/dashboard');
     }
 });
-
 
 
 app.get('/transactions/:id/edit', verifyToken, async (req, res) => {

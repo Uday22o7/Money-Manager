@@ -41,16 +41,12 @@
         </div>
 
         <!-- Chart Section -->
-        <!-- <div class="chart-container">
-            <div class="chart-card" style="position: relative; height:400px">
-              <h3>Expense Categories</h3>
-              <canvas id="categoryChart"></canvas>
+        <section class="chart-container">
+            <div class="chart-card" style="position: relative; height:400px; max-width:500px; margin: 0 auto;">
+              <h3>Category Distribution</h3>
+              <canvas id="categoryChart" width="400" height="400"></canvas>
             </div>
-            <div class="chart-card" style="position: relative; height:400px">
-              <h3>Income vs Expenses</h3>
-              <canvas id="trendChart"></canvas>
-            </div>
-        </div> -->
+        </section>
 
         <!-- Monthly Breakdown Table -->
         <section class="monthly-breakdown">
@@ -80,14 +76,15 @@
 
     <!-- Add this hidden div to store chart data -->
     <div id="chart-data" 
-    data-category-labels="<%= JSON.stringify(categoryLabels) %>"
-    data-category-values="<%= JSON.stringify(categoryValues) %>"
-    data-monthly-labels="<%= JSON.stringify(monthlyLabels) %>"
-    data-monthly-income="<%= JSON.stringify(monthlyIncome) %>"
-    data-monthly-expenses="<%= JSON.stringify(monthlyExpenses) %>">
+        data-category-labels="<%= JSON.stringify(categoryLabels) %>"
+        data-category-values="<%= JSON.stringify(categoryValues) %>"
+        data-monthly-labels="<%= JSON.stringify(monthlyLabels) %>"
+        data-monthly-income="<%= JSON.stringify(monthlyIncome) %>"
+        data-monthly-expenses="<%= JSON.stringify(monthlyExpenses) %>">
     </div>
     
     <!-- Change the script tag to this -->
-    <script type="module" src="/js/charts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/report.js"></script>
 </body>
 </html>
