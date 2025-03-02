@@ -32,11 +32,22 @@ nav {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--mcolor);
-}
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .logo-svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo span {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #3498db; /* Brand color */
+  }
 
 .blueButton {
     background-color: var(--mcolor);

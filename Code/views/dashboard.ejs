@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Money Manager</title>
+  <link rel="stylesheet" href="/css/dashboard.css" />
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="nav">
+    <div class="logo">
+      <img src="/img/piggy-bank-svgrepo-com.svg" class="logo-svg" alt="Money Manager Logo" />
+      <span>Money Manager</span>
+    </div>
+    <div class="nav-links">
+      <a href="/dashboard" class="active">Dashboard</a>
+      <a href="/transactions">Transactions</a>
+      <a href="/budgets">Budgets</a>
+      <a href="/reports">Reports</a>
+      <button id="logoutBtn"> <a  style="color: white;"  href="/logout">Logout</a> </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="dashboard">
+    <!-- Quick Stats -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <h3>Current Balance</h3>
+        <p class="balance">$0.00</p>
+      </div>
+      <div class="stat-card">
+        <h3>Monthly Budget</h3>
+        <p class="budget">$0.00</p>
+      </div>
+    </div>
+
+    <!-- Add Transaction Form -->
+    <section class="transaction-form">
+      <h2>Add Transaction</h2>
+      <form action="/transactions" method="POST">
+        <div class="form-group">
+          <label>Amount</label>
+          <input type="number" name="amount" step="0.01" required />
+        </div>
+        
+        <div class="form-group">
+          <label>Type</label>
+          <select name="type" required>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <select name="category" required>
+            <!-- Example categories. Replace or populate dynamically as needed. -->
+            <option value="food">Food</option>
+            <option value="transport">Transport</option>
+            <option value="shopping">Shopping</option>
+          </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Add Transaction</button>
+      </form>
+    </section>
+
+    <!-- Recent Transactions -->
+    <section class="recent-transactions">
+      <h2>Recent Transactions</h2>
+      <div class="transactions-list">
+        <!-- Example transaction item; replace dynamically as needed -->
+        <div class="transaction-item food">
+          <span class="amount">$12.99</span>
+          <span class="category">Food</span>
+          <span class="date">2025-03-02</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- <script>
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      window.location.href = '/auth';
+    });
+  </script> -->
+</body>
+</html>

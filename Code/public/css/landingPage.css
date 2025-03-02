@@ -9,6 +9,17 @@
     font-family: 'Arial', sans-serif;
 }
 
+/* For modern browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+  }
+  
+  html {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    overflow-y: scroll; /* Allow vertical scrolling */
+  }
+
 /* Navigation Bar */
 nav {
     display: flex;
@@ -20,10 +31,21 @@ nav {
 }
 
 .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--mcolor);
-}
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .logo-svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo span {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #3498db; /* Brand color */
+  }
 
 .blueButton {
     background-color: var(--mcolor);
