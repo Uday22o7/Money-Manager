@@ -34,15 +34,15 @@ Money Manager is an intelligent web application that helps users track expenses,
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/money-manager.git
-cd money-manager
+git clone https://github.com/Uday22o7/Money-Manager.git
+cd Money-Manager/Code 
 
 # Install dependencies
-npm install
-
-# Set environment variables
-cp .env.example .env
-# Update values in .env file
+npm install 
 
 # Start development server
 node app.js
+
+# Set environment variables
+cp .env.example .env
+
