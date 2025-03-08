@@ -14,7 +14,7 @@ const bcrypt = require('bcrypt');
 
 const User = require("./models/User")
 const Transaction = require("./models/Transaction")
-
+const Budget = require("./models/Budget");
 const session = require('express-session');
 const flash = require('connect-flash');
 
@@ -184,7 +184,7 @@ app.get('/transactions', verifyToken, (req, res) => {
 
 app.get('/report', verifyToken, async (req, res) => {
     try {
-        // 1. Existing monthly summary
+        // 1. Existing monthly summary (keep your existing code)
         const monthlySummary = await Transaction.aggregate([
             {
                 $match: {
@@ -237,7 +237,7 @@ app.get('/report', verifyToken, async (req, res) => {
             categoryValues.push(0);
         }
 
-        // 3. NEW: Current month income vs. expense
+        // 3. Current month income vs. expense
         const now = new Date();
         const currentYear = now.getFullYear();
         const currentMonth = now.getMonth() + 1;
@@ -280,12 +280,23 @@ app.get('/report', verifyToken, async (req, res) => {
             monthlyExpensePie = currentMonthStats[0].totalExpense;
         }
 
-        // 4. Prepare monthly labels if you have a monthly chart or table
+        // 4. Monthly labels
         const monthlyLabels = monthlySummary.map(m =>
             `${new Date(m._id.year, m._id.month - 1).toLocaleString('default', { month: 'short' })} ${m._id.year}`
         );
 
-        // 5. Render the EJS view
+        // 5. NEW: Get budget data for bar chart
+        const budgets = await Budget.find({
+            user: req.user.id,
+            type: 'monthly'
+        });
+
+        // Format budget data for charts
+        const budgetCategories = budgets.map(b => b.category);
+        const budgetTargets = budgets.map(b => b.target);
+        const budgetActuals = budgets.map(b => b.current);
+
+        // 6. Render the EJS view with budget data
         res.render('report', {
             user: req.user,
             monthlySummary,
@@ -296,6 +307,10 @@ app.get('/report', verifyToken, async (req, res) => {
             categoryValues,
             monthlyIncomePie,
             monthlyExpensePie,
+            // Add budget data
+            budgetCategories,
+            budgetTargets,
+            budgetActuals,
             error: req.flash('error'),
             success: req.flash('success')
         });
@@ -305,7 +320,6 @@ app.get('/report', verifyToken, async (req, res) => {
         res.redirect('/dashboard');
     }
 });
-
 
 
 app.get('/transactions/:id/edit', verifyToken, async (req, res) => {
@@ -348,6 +362,90 @@ app.post('/transactions', verifyToken, async (req, res) => {
 });
 
 
+// Budget page route
+app.get('/budget', verifyToken, async (req, res) => {
+    try {
+        // Fetch all budgets for the current user
+        const budgets = await Budget.find({ user: req.user.id });
+
+        // For monthly budgets, check if we need to update any with actual spending
+        const currentMonth = new Date().getMonth() + 1;
+        const currentYear = new Date().getFullYear();
+
+        // For each monthly budget, calculate current spending
+        for (let budget of budgets) {
+            if (budget.type === 'monthly') {
+                // Get all expenses for this category in the current month
+                const monthlyExpenses = await Transaction.aggregate([
+                    {
+                        $match: {
+                            user: new mongoose.Types.ObjectId(req.user.id),
+                            categories: budget.category,
+                            type: 'expense',
+                            date: { $exists: true },
+                            $expr: {
+                                $and: [
+                                    { $eq: [{ $year: "$date" }, currentYear] },
+                                    { $eq: [{ $month: "$date" }, currentMonth] }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            total: { $sum: "$amount" }
+                        }
+                    }
+                ]);
+
+                // Update the current spending amount
+                budget.current = monthlyExpenses.length > 0 ? monthlyExpenses[0].total : 0;
+                await budget.save();
+            } else if (budget.type === 'custom') {
+                // For custom date range budgets
+                const customExpenses = await Transaction.aggregate([
+                    {
+                        $match: {
+                            user: new mongoose.Types.ObjectId(req.user.id),
+                            categories: budget.category,
+                            type: 'expense',
+                            date: {
+                                $gte: budget.startDate,
+                                $lte: budget.endDate
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            total: { $sum: "$amount" }
+                        }
+                    }
+                ]);
+
+                // Update the current spending amount
+                budget.current = customExpenses.length > 0 ? customExpenses[0].total : 0;
+                await budget.save();
+            }
+        }
+
+        res.render('budget', {
+            user: req.user,
+            budgets,
+            categories,
+            error: res.locals.error,
+            success: res.locals.success
+        });
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'Error loading budget page');
+        res.redirect('/dashboard');
+    }
+});
+
+
+
 app.post('/transactions/:id/edit', verifyToken, async (req, res) => {
     try {
         const { id } = req.params;
@@ -384,6 +482,73 @@ app.post('/transactions/:id/delete', verifyToken, async (req, res) => {
     }
 });
 
+
+// Create a new budget
+app.post('/budget', verifyToken, async (req, res) => {
+    try {
+        const { type, category, target, startDate, endDate } = req.body;
+
+        // Validate the request
+        if (!type || !category || !target) {
+            req.flash('error', 'Missing required fields');
+            return res.redirect('/budget');
+        }
+
+        // For custom budgets, ensure dates are provided
+        if (type === 'custom' && (!startDate || !endDate)) {
+            req.flash('error', 'Start and end dates are required for custom budgets');
+            return res.redirect('/budget');
+        }
+
+        // Check if a budget for this category already exists (for monthly budgets)
+        if (type === 'monthly') {
+            const existingBudget = await Budget.findOne({
+                user: req.user.id,
+                category: category,
+                type: 'monthly'
+            });
+
+            if (existingBudget) {
+                req.flash('error', 'A monthly budget for this category already exists');
+                return res.redirect('/budget');
+            }
+        }
+
+        // Create the new budget
+        const budget = new Budget({
+            user: req.user.id,
+            type,
+            category,
+            target: parseFloat(target),
+            current: 0, // Start with zero
+            startDate: type === 'custom' ? new Date(startDate) : null,
+            endDate: type === 'custom' ? new Date(endDate) : null
+        });
+
+        await budget.save();
+        req.flash('success', 'Budget created successfully');
+        res.redirect('/budget');
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'Failed to create budget');
+        res.redirect('/budget');
+    }
+});
+
+// Delete a budget
+app.post('/budget/:id/delete', verifyToken, async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Delete only if budget belongs to the current user
+        await Budget.deleteOne({ _id: id, user: req.user.id });
+        req.flash('success', 'Budget deleted successfully');
+        res.redirect('/budget');
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'Failed to delete budget');
+        res.redirect('/budget');
+    }
+});
 
 
 app.post('/register', async (req, res) => {

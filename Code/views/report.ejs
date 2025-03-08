@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Reports - Money Manager</title>
+    <title>Reports - Money Manager</title>
     <link rel="stylesheet" href="/css/report.css">
 </head>
 <body>
@@ -14,8 +14,9 @@
       <span>Money Manager</span>
     </div>
     <div class="nav-links">
-      <a href="/dashboard" >Dashboard</a>
+      <a href="/dashboard">Dashboard</a>
       <a href="/transactions">Transactions</a>
+      <a href="/budget">Budget</a>
       <a href="/report" class="active">Reports</a>
       <button id="logoutBtn"><a style="color: white;" href="/logout">Logout</a></button>
     </div>
@@ -52,7 +53,27 @@
               <h3>Category Distribution</h3>
               <canvas id="categoryChart" width="400" height="400"></canvas>
             </div>
+            
+            <div class="chart-card" style="position: relative; height:400px; max-width:500px; margin: 0 auto;">
+              <h3>Income vs Expenses</h3>
+              <canvas id="monthlyChart" width="400" height="400"></canvas>
+            </div>
         </section>
+        
+        <!-- Budget Progress Section -->
+        <% if (budgetCategories && budgetCategories.length > 0) { %>
+        <section class="budget-progress-section">
+            <h2>Monthly Budget Progress</h2>
+            <div class="chart-card" style="position: relative; height:400px; width:100%; margin: 0 auto;">
+                <canvas id="budgetChart" width="800" height="400"></canvas>
+            </div>
+        </section>
+        <% } else { %>
+        <section class="budget-progress-section">
+            <h2>Monthly Budget Progress</h2>
+            <p class="no-data">No budget data available. <a href="/budget">Create a budget</a> to see your progress here.</p>
+        </section>
+        <% } %>
 
         <!-- Monthly Breakdown Table -->
         <section class="monthly-breakdown">
@@ -86,10 +107,13 @@
         data-category-values="<%= JSON.stringify(categoryValues) %>"
         data-monthly-labels="<%= JSON.stringify(monthlyLabels) %>"
         data-monthly-income="<%= JSON.stringify(monthlyIncome) %>"
-        data-monthly-expenses="<%= JSON.stringify(monthlyExpenses) %>">
+        data-monthly-expenses="<%= JSON.stringify(monthlyExpenses) %>"
+        data-budget-categories="<%= typeof budgetCategories !== 'undefined' ? JSON.stringify(budgetCategories) : '[]' %>"
+        data-budget-targets="<%= typeof budgetTargets !== 'undefined' ? JSON.stringify(budgetTargets) : '[]' %>"
+        data-budget-actuals="<%= typeof budgetActuals !== 'undefined' ? JSON.stringify(budgetActuals) : '[]' %>">
     </div>
     
-    <!-- Change the script tag to this -->
+    <!-- Script includes -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/js/report.js"></script>
 </body>

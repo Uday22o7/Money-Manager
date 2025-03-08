@@ -1,79 +1,183 @@
+document.addEventListener('DOMContentLoaded', function () {
+  // Get chart data from hidden div
+  const chartDataElement = document.getElementById('chart-data');
 
+  // Category chart data
+  const categoryLabels = JSON.parse(chartDataElement.dataset.categoryLabels);
+  const categoryValues = JSON.parse(chartDataElement.dataset.categoryValues);
 
-function initCharts() {
-  const chartDataDiv = document.getElementById('chart-data');
+  // Monthly chart data
+  const monthlyLabels = JSON.parse(chartDataElement.dataset.monthlyLabels);
+  const monthlyIncome = JSON.parse(chartDataElement.dataset.monthlyIncome);
+  const monthlyExpenses = JSON.parse(chartDataElement.dataset.monthlyExpenses);
 
-  // 1. Category Chart Data
-  let categoryLabels = JSON.parse(chartDataDiv.dataset.categoryLabels);
-  let categoryValues = JSON.parse(chartDataDiv.dataset.categoryValues);
+  // Budget chart data
+  const budgetCategories = JSON.parse(chartDataElement.dataset.budgetCategories || '[]');
+  const budgetTargets = JSON.parse(chartDataElement.dataset.budgetTargets || '[]');
+  const budgetActuals = JSON.parse(chartDataElement.dataset.budgetActuals || '[]');
 
-  // Fallback for no category data
-  if (!categoryLabels || categoryLabels.length === 0) {
-    categoryLabels = ["No Data"];
-    categoryValues = [0];
+  // Generate background colors for charts
+  function generateColors(count, alpha = 0.8) {
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+      // Generate hue from 0 to 360 degrees
+      const hue = (i * 137.5) % 360; // Golden angle approximation for good distribution
+      colors.push(`hsla(${hue}, 70%, 60%, ${alpha})`);
+    }
+    return colors;
   }
 
-  // 2. Monthly Income vs Expense
-  let monthlyIncomePie = parseFloat(chartDataDiv.dataset.monthlyIncomePie) || 0;
-  let monthlyExpensePie = parseFloat(chartDataDiv.dataset.monthlyExpensePie) || 0;
-
-  // CATEGORY PIE CHART
-  const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-  new Chart(categoryCtx, {
-    type: 'pie',
-    data: {
-      labels: categoryLabels,
-      datasets: [{
-        data: categoryValues,
-        backgroundColor: [
-          '#3498db','#2ecc71','#f1c40f','#e74c3c',
-          '#9b59b6','#1abc9c','#34495e','#e67e22'
-        ],
-        borderColor: '#ffffff',
-        borderWidth: 2
-      }]
-    },
-    options: {
-      plugins: {
-        legend: { position: 'bottom' }
+  // 1. Category distribution pie chart
+  if (document.getElementById('categoryChart')) {
+    const ctx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: categoryLabels,
+        datasets: [{
+          data: categoryValues,
+          backgroundColor: generateColors(categoryLabels.length),
+          borderWidth: 1
+        }]
       },
-      layout: { padding: 10 }
-    }
-  });
-
-  // MONTHLY INCOME VS EXPENSE PIE CHART
-  const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-
-  // If both monthlyIncomePie and monthlyExpensePie are 0, fallback to a "No Data" slice
-  let monthlyLabels, monthlyValues, monthlyColors;
-  if (monthlyIncomePie === 0 && monthlyExpensePie === 0) {
-    monthlyLabels = ["No Data"];
-    monthlyValues = [0];
-    monthlyColors = ["#bdc3c7"]; // grey or any fallback color
-  } else {
-    monthlyLabels = ["Income", "Expense"];
-    monthlyValues = [monthlyIncomePie, monthlyExpensePie];
-    monthlyColors = ["#2ecc71", "#e74c3c"]; // green & red
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const value = context.raw;
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = Math.round((value / total) * 100);
+                return `₹${value.toFixed(2)} (${percentage}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
   }
 
-  new Chart(monthlyCtx, {
-    type: 'pie',
-    data: {
-      labels: monthlyLabels,
-      datasets: [{
-        data: monthlyValues,
-        backgroundColor: monthlyColors,
-        borderColor: '#ffffff',
-        borderWidth: 2
-      }]
-    },
-    options: {
-      plugins: {
-        legend: { position: 'bottom' }
+  // 2. Monthly income vs expenses chart
+  if (document.getElementById('monthlyChart')) {
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: monthlyLabels,
+        datasets: [
+          {
+            label: 'Income',
+            data: monthlyIncome,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            tension: 0.1,
+            fill: true
+          },
+          {
+            label: 'Expenses',
+            data: monthlyExpenses,
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            tension: 0.1,
+            fill: true
+          }
+        ]
       },
-      layout: { padding: 10 }
-    }
-  });
-}
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function (value) {
+                return '₹' + value;
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  label += '₹' + context.parsed.y.toFixed(2);
+                }
+                return label;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
 
-document.addEventListener('DOMContentLoaded', initCharts);
+  // 3. Budget comparison chart
+  if (document.getElementById('budgetChart')) {
+    const ctx = document.getElementById('budgetChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: budgetCategories,
+        datasets: [
+          {
+            label: 'Budget Target',
+            data: budgetTargets,
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          },
+          {
+            label: 'Actual Spending',
+            data: budgetActuals,
+            backgroundColor: 'rgba(255, 159, 64, 0.6)',
+            borderColor: 'rgba(255, 159, 64, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function (value) {
+                return '₹' + value;
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  label += '₹' + context.parsed.y.toFixed(2);
+                }
+                return label;
+              }
+            }
+          },
+          legend: {
+            position: 'top',
+          }
+        }
+      }
+    });
+  }
+});

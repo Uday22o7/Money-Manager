@@ -1,0 +1,371 @@
+:root {
+    --mcolor: #007bff;
+    --scolor: rgb(43, 43, 43);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+/* For modern browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar */
+}
+
+html {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+    overflow-y: scroll;
+    /* Allow vertical scrolling */
+}
+
+/* ---------------------- */
+/*       BODY & NAV       */
+/* ---------------------- */
+body {
+    background: #f0f2f5;
+}
+
+/* Sticky top nav */
+.nav {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo-svg {
+    width: 40px;
+    height: 40px;
+}
+
+.logo span {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--mcolor);
+}
+
+/* Nav links and logout button */
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #3498db;
+}
+
+.nav-links a.active {
+    color: #3498db;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.25rem;
+}
+
+/* Logout button */
+#logoutBtn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#logoutBtn:hover {
+    background: #c0392b;
+}
+
+/* ---------------------- */
+/*     DASHBOARD MAIN     */
+/* ---------------------- */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ---------------------- */
+/*     BUDGET SECTIONS    */
+/* ---------------------- */
+.budget-creation,
+.active-budgets {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.budget-creation h2,
+.active-budgets h2 {
+    margin-bottom: 1.5rem;
+    color: var(--mcolor);
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+/* ---------------------- */
+/*     BUDGET FORM        */
+/* ---------------------- */
+.budget-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.form-group select,
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+    border-color: var(--mcolor);
+}
+
+.date-inputs {
+    display: flex;
+    gap: 1rem;
+}
+
+.date-inputs>div {
+    flex: 1;
+}
+
+.submit-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background 0.3s;
+    align-self: flex-start;
+}
+
+.submit-btn:hover {
+    background: #218838;
+}
+
+/* ---------------------- */
+/*     BUDGET ITEMS       */
+/* ---------------------- */
+.budgets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.budget-item {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.budget-item:hover {
+    transform: translateY(-2px);
+}
+
+.budget-details {
+    flex: 2;
+}
+
+.budget-details h3 {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.budget-type {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.budget-period {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.budget-amount {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.budget-progress {
+    flex: 3;
+    padding: 0 1rem;
+}
+
+.progress-bar {
+    height: 12px;
+    background-color: #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress {
+    height: 100%;
+    background-color: var(--mcolor);
+    border-radius: 6px;
+}
+
+.progress-text {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.budget-actions {
+    flex: 1;
+    text-align: right;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-size: 0.9rem;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+}
+
+.no-budgets {
+    color: #7f8c8d;
+    font-style: italic;
+    padding: 1rem 0;
+}
+
+/* ---------------------- */
+/*     ALERT MESSAGES     */
+/* ---------------------- */
+.alert {
+    padding: 1rem;
+    border-radius: 5px;
+    max-width: 800px;
+    text-align: center;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.5s ease-out;
+    opacity: 1;
+}
+
+.alert-error {
+    background: #fee;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+}
+
+.alert-success {
+    background: #efefef;
+    border: 1px solid #2ecc71;
+    color: #2ecc71;
+}
+
+/* ---------------------- */
+/*     RESPONSIVE CSS     */
+/* ---------------------- */
+@media (max-width: 768px) {
+    .nav {
+        padding: 1rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+    }
+
+    .budget-creation,
+    .active-budgets {
+        padding: 1.5rem;
+    }
+
+    .budget-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .budget-progress {
+        width: 100%;
+        padding: 0;
+    }
+
+    .budget-actions {
+        width: 100%;
+        text-align: left;
+    }
+
+    .date-inputs {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

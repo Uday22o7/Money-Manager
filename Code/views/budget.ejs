@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Management - Money Manager</title>
+  <!-- Fixed CSS path to be absolute from root or try a relative path -->
+  <link rel="stylesheet" href="/css/budget.css">
+  <!-- Fallback inline styles in case the CSS doesn't load -->
+  <!-- <style>
+
+  </style> -->
+</head>
+<body>
+  <nav class="nav">
+    <div class="logo">
+      <img src="https://res.cloudinary.com/dcjtbfnww/image/upload/v1740935604/piggy-bank-svgrepo-com_rosebd.svg"
+        class="logo-svg" alt="Money Manager Logo" />
+      <span>Money Manager</span>
+    </div>
+    <div class="nav-links">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/transactions">Transactions</a>
+      <a href="/budget" class="active">Budget</a>
+      <a href="/report">Reports</a>
+      <button id="logoutBtn"><a style="color: white;" href="/logout">Logout</a></button>
+    </div>
+  </nav>
+
+  <main class="dashboard">
+    <h1>Budget Management</h1>
+
+    <!-- Display Flash Messages (if any) -->
+    <% if (error && error.length > 0) { %>
+      <div class="alert alert-error">
+        <%= error[0] %>
+      </div>
+    <% } %>
+    <% if (success && success.length > 0) { %>
+      <div class="alert alert-success">
+        <%= success[0] %>
+      </div>
+    <% } %>
+
+    <!-- Budget Creation Form -->
+    <section class="budget-creation">
+      <h2>Create New Budget</h2>
+      <form action="/budget" method="POST" class="budget-form">
+        <div class="form-group">
+          <label for="budget-type">Budget Type</label>
+          <select name="type" id="budget-type" required>
+            <option value="monthly">Monthly</option>
+            <option value="custom">Custom Period</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="budget-category">Category</label>
+          <select name="category" id="budget-category" required>
+            <option value="">Select a Category</option>
+            <% categories.forEach(function(cat) { %>
+              <option value="<%= cat %>"><%= cat %></option>
+            <% }); %>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="budget-target">Target Amount (₹)</label>
+          <input type="number" name="target" id="budget-target" min="1" step="0.01" required>
+        </div>
+
+        <div class="form-group date-inputs" id="custom-dates" style="display: none;">
+          <div>
+            <label for="budget-start">Start Date</label>
+            <input type="date" name="startDate" id="budget-start">
+          </div>
+          <div>
+            <label for="budget-end">End Date</label>
+            <input type="date" name="endDate" id="budget-end">
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Create Budget</button>
+      </form>
+    </section>
+
+    <!-- Active Budgets Section -->
+    <section class="active-budgets">
+      <h2>Active Budgets</h2>
+      <div class="budgets-list">
+        <% if (budgets && budgets.length > 0) { %>
+          <% budgets.forEach(budget => { %>
+            <div class="budget-item">
+              <div class="budget-details">
+                <h3><%= budget.category %></h3>
+                <p class="budget-type"><%= budget.type === 'monthly' ? 'Monthly' : 'Custom' %></p>
+                <% if (budget.type === 'custom') { %>
+                  <p class="budget-period">
+                    <%= new Date(budget.startDate).toLocaleDateString() %> - 
+                    <%= new Date(budget.endDate).toLocaleDateString() %>
+                  </p>
+                <% } %>
+                <p class="budget-amount">
+                  ₹<%= budget.current.toFixed(2) %> / ₹<%= budget.target.toFixed(2) %>
+                </p>
+              </div>
+              <div class="budget-progress">
+                <div class="progress-bar">
+                  <!-- Fixed the problematic line - removed space before the closing semicolon and added proper units -->
+                  <div class="progress-bar">
+                    <% const progressWidth = Math.min(100, (budget.current / budget.target) * 100); %>
+                    <div class="progress" style="width: <%= progressWidth %>%"></div>
+                  </div>                  
+                </div>
+                <p class="progress-text"><%= Math.min(100, ((budget.current / budget.target) * 100).toFixed(1)) %>%</p>
+              </div>
+              <div class="budget-actions">
+                <form action="/budget/<%= budget._id %>/delete" method="POST" style="display:inline;">
+                  <button type="submit" class="delete-btn">Delete</button>
+                </form>
+              </div>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <p class="no-budgets">No active budgets found. Create one to get started!</p>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Show/hide custom date inputs based on budget type selection
+    document.getElementById('budget-type').addEventListener('change', function() {
+      const customDates = document.getElementById('custom-dates');
+      if (this.value === 'custom') {
+        customDates.style.display = 'flex';
+      } else {
+        customDates.style.display = 'none';
+      }
+    });
+
+    // Auto-hide flash messages
+    setTimeout(() => {
+      const alertElem = document.querySelector('.alert');
+      if (alertElem) {
+        alertElem.style.transition = 'opacity 0.5s ease-out';
+        alertElem.style.opacity = '0';
+        setTimeout(() => alertElem.remove(), 500); // remove after fade out
+      }
+    }, 2000);
+
+    // Check if CSS loaded successfully
+    window.addEventListener('load', function() {
+      const styleSheets = document.styleSheets;
+      let externalCssLoaded = false;
+      
+      for (let i = 0; i < styleSheets.length; i++) {
+        if (styleSheets[i].href && styleSheets[i].href.includes('/css/budget.css')) {
+          externalCssLoaded = true;
+          break;
+        }
+      }
+      
+      if (!externalCssLoaded) {
+        console.warn('External CSS file could not be loaded. Using fallback styles.');
+      }
+    });
+  </script>
+</body>
+</html>
