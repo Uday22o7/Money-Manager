@@ -4,11 +4,12 @@ const port = 8000;
 const path = require('path')
 
 const mongoose = require("mongoose");
-const db = "mongodb://127.0.0.1:27017/Money_Manager"
+// const db = "mongodb://127.0.0.1:27017/Money_Manager";
 
 const ejsMate = require("ejs-mate")
 const bodyParser = require("body-parser")
 const dotenv = require("dotenv")
+dotenv.config()
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -19,10 +20,11 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 const mongoURI = process.env.MONGO_URI;
-dotenv.config()
+console.log(mongoURI)
+
 
 // mongoose connection
-mongoose.connect(db)
+mongoose.connect(mongoURI)
     .then(() => {
         console.log('mongo Connection is successful');
     })
